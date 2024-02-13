@@ -2,6 +2,7 @@ package com.example.exercise_22.di
 
 import com.example.exercise_22.BuildConfig
 import com.example.exercise_22.data.common.HandleResponse
+import com.example.exercise_22.data.service.posts.PostsService
 import com.example.exercise_22.data.service.stories.StoriesService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -63,6 +64,12 @@ object AppModule {
     @Singleton
     fun provideStoriesService(retrofit: Retrofit) : StoriesService{
         return retrofit.create(StoriesService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePostsService(retrofit: Retrofit): PostsService{
+        return retrofit.create(PostsService::class.java)
     }
 
     @Provides

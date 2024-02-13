@@ -2,16 +2,17 @@ package com.example.exercise_22.presentation.screen.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.exercise_22.domain.usecase.stories.GetStoriesUseCase
+import com.example.exercise_22.domain.usecase.post.GetPostsUseCase
+import com.example.exercise_22.domain.usecase.story.GetStoriesUseCase
 import com.example.exercise_22.presentation.events.home.HomeEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getStoriesUseCase: GetStoriesUseCase
+    private val getStoriesUseCase: GetStoriesUseCase,
+    private val getPostsUseCase: GetPostsUseCase
 ): ViewModel() {
 
     fun onEvent(events: HomeEvents){
@@ -31,6 +32,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchPosts() {
-
+        viewModelScope.launch {
+            getPostsUseCase().collect{
+                println("this is posts in viewModel $it")
+            }
+        }
     }
 }
