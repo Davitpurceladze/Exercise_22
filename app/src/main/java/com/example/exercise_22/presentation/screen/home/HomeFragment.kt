@@ -4,22 +4,29 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.exercise_22.databinding.FragmentHomeBinding
 import com.example.exercise_22.presentation.base.BaseFragment
 import com.example.exercise_22.presentation.events.home.HomeEvents
 import com.example.exercise_22.presentation.state.home.PostsState
 import com.example.exercise_22.presentation.state.home.StoriesState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
 
     private val viewModel: HomeViewModel by viewModels()
+    private lateinit var storiesRecyclerAdapter: StoriesRecyclerAdapter
+    private lateinit var postsRecyclerAdapter: PostsRecyclerAdapter
 
     override fun bind() {
+        storiesRecyclerAdapter = StoriesRecyclerAdapter()
+        postsRecyclerAdapter = PostsRecyclerAdapter()
         fetchData()
+        setStoriesRecyclerAdapter()
+        setPostsRecyclerAdapter()
     }
 
     override fun bindViewActionListeners() {
@@ -46,11 +53,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun handlePostsState(state: PostsState) {
         state.posts?.let {
             println("this is posts in home fragment -> $it")
+            postsRecyclerAdapter.submitList(it)
         }
     }
     private fun handleStoriesSate(state: StoriesState){
         state.stories?.let {
             println("this is stories in home fragment -> $it")
+            storiesRecyclerAdapter.submitList(it)
+
         }
     }
 
@@ -60,6 +70,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             onEvent(HomeEvents.FetchStories)
             onEvent(HomeEvents.FetchPosts)
         }
-
     }
+
+   private fun setStoriesRecyclerAdapter() {
+       binding.apply {
+           recyclerStories.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.HORIZONTAL, false)
+           recyclerStories.adapter = storiesRecyclerAdapter
+       }
+   }
+
+    private fun setPostsRecyclerAdapter() {
+        binding.apply {
+            recyclerPosts.layoutManager =LinearLayoutManager(requireContext())
+            recyclerPosts.adapter = postsRecyclerAdapter
+        }
+    }
+
+
 }
