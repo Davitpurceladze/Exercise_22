@@ -24,6 +24,7 @@ class PostsRecyclerAdapter: ListAdapter<Post, PostsRecyclerAdapter.PostViewHolde
                 tvDescription.text = item.shareContent
                 tvCommentAmount.text=item.comments.toString()
                 tvLikesAmount.text=item.likes.toString()
+                tvPostDate.text = item.owner.postDate
 
                 when( item.images?.size) {
                     null -> {

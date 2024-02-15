@@ -8,8 +8,7 @@ import com.example.exercise_22.domain.usecase.story.GetStoriesUseCase
 import com.example.exercise_22.presentation.events.home.HomeEvents
 import com.example.exercise_22.presentation.mapper.posts.toPresenter
 import com.example.exercise_22.presentation.mapper.stories.toPresenter
-import com.example.exercise_22.presentation.state.home.PostsState
-import com.example.exercise_22.presentation.state.home.StoriesState
+import com.example.exercise_22.presentation.state.home.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -24,42 +23,40 @@ class HomeViewModel @Inject constructor(
     private val getPostsUseCase: GetPostsUseCase
 ) : ViewModel() {
 
-    private val _storiesState = MutableStateFlow(StoriesState())
-    val storiesState: SharedFlow<StoriesState> = _storiesState.asStateFlow()
-
-    private val _postsState = MutableStateFlow(PostsState())
-    val postsState: SharedFlow<PostsState> = _postsState.asStateFlow()
+    private val _homeState = MutableStateFlow(HomeState())
+    val homeState: SharedFlow<HomeState> = _homeState.asStateFlow()
 
     fun onEvent(events: HomeEvents) {
         when (events) {
             is HomeEvents.FetchStories -> fetchStories()
             is HomeEvents.FetchPosts -> fetchPosts()
         }
-
     }
 
     private fun fetchStories() {
         viewModelScope.launch {
             getStoriesUseCase().collect {
                 when (it) {
-                    is Resource.Loading -> _storiesState.update { currentState ->
+                    is Resource.Loading -> _homeState.update { currentState ->
                         currentState.copy(
                             isLoading = it.loading
                         )
                     }
 
-                    is Resource.Error -> _storiesState.update { currentState ->
+                    is Resource.Error -> _homeState.update { currentState ->
                         currentState.copy(
                             errorMessage = it.errorMessage
                         )
                     }
 
-                    is Resource.Success -> _storiesState.update { currentState ->
-                        currentState.copy(
-                            stories = it.data.map {
-                                it.toPresenter()
-                            }
-                        )
+                    is Resource.Success -> {
+                        _homeState.update { currentState ->
+                            currentState.copy(
+                                stories = it.data.map {
+                                    it.toPresenter()
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -70,24 +67,26 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             getPostsUseCase().collect {
                 when (it) {
-                    is Resource.Loading -> _postsState.update { currentState ->
+                    is Resource.Loading -> _homeState.update { currentState ->
                         currentState.copy(
                             isLoading = it.loading
                         )
                     }
 
-                    is Resource.Error -> _postsState.update { currentState ->
+                    is Resource.Error -> _homeState.update { currentState ->
                         currentState.copy(
                             errorMessage = it.errorMessage
                         )
                     }
 
-                    is Resource.Success -> _postsState.update { currentState ->
-                        currentState.copy(
-                            posts = it.data.map {
-                                it.toPresenter()
-                            }
-                        )
+                    is Resource.Success -> {
+                        _homeState.update { currentState ->
+                            currentState.copy(
+                                posts = it.data.map{
+                                    it.toPresenter()
+                                }
+                            )
+                        }
                     }
                 }
             }
