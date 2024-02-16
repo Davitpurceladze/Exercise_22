@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.exercise_22.databinding.FragmentPostDetailsBinding
 import com.example.exercise_22.presentation.base.BaseFragment
 import com.example.exercise_22.presentation.events.post_details.PostDetailsEvents
+import com.example.exercise_22.presentation.extension.loadImage
 import com.example.exercise_22.presentation.model.post_details.PostDetailsImage
 import com.example.exercise_22.presentation.state.post_details.PostDetailsState
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +29,7 @@ class PostDetailsFragment : BaseFragment<FragmentPostDetailsBinding>(FragmentPos
     override fun bind() {
 
         fetchPostDetails()
+
         bindViewPager()
     }
 
@@ -59,6 +61,13 @@ class PostDetailsFragment : BaseFragment<FragmentPostDetailsBinding>(FragmentPos
 
     private fun handlePostDetailsState(state: PostDetailsState) {
         state.postDetails?.let {
+            with(binding){
+                val fullName = "${it.firstName} ${it.lastName}"
+                tvFullName.text = fullName
+                tvPostDate.text = it.postDate
+                tvDescription.text = it.shareContent
+                imgProfile.loadImage(it.profile)
+            }
             val imgList: List<PostDetailsImage> = listOf(PostDetailsImage(1, it.images!![0]), PostDetailsImage(2, "https://cdn0.thedailyeco.com/en/posts/6/4/0/natural_regions_definition_and_examples_46_orig.jpg"),PostDetailsImage(3, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuFLT26U49p0XhoQLNSBodEqpF2nk-Zb2zXw&usqp=CAU") )
             pagerAdapter. submitList(imgList)
         }

@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="19dp"
     android:layout_marginTop="15dp"
     android:background="@drawable/post_background_style"
-    android:paddingTop="24dp">
+    android:paddingHorizontal="19dp"
+    android:paddingTop="24dp"
+    android:paddingBottom="20dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgProfile"
@@ -56,6 +57,7 @@
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgPost1"
         android:layout_width="133dp"
+        app:shapeAppearanceOverlay="@style/roundedImgView"
         android:layout_height="154dp"
         android:layout_marginTop="10dp"
         android:scaleType="center"
@@ -67,6 +69,7 @@
         android:layout_width="133dp"
         android:layout_height="71dp"
         android:layout_marginStart="13dp"
+        app:shapeAppearanceOverlay="@style/roundedImgView"
         android:layout_marginTop="10dp"
         android:scaleType="center"
         app:layout_constraintStart_toEndOf="@id/imgPost1"
@@ -80,6 +83,7 @@
         android:layout_marginStart="13dp"
         android:layout_marginTop="12dp"
         android:scaleType="center"
+        app:shapeAppearanceOverlay="@style/roundedImgView"
         app:layout_constraintStart_toEndOf="@id/imgPost1"
         app:layout_constraintTop_toBottomOf="@id/imgPost2" />
 
@@ -191,6 +195,18 @@
         android:background="@color/text_gray"
         app:layout_constraintTop_toBottomOf="@id/tvLikes" />
 
+
+    <FrameLayout
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/comment_img_style"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bottomLine">
+
+    </FrameLayout>
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/CommentProfile"
         android:layout_width="wrap_content"
@@ -203,10 +219,15 @@
 
     <androidx.appcompat.widget.AppCompatEditText
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="19dp"
+        android:background="@drawable/input_comment_style"
+        android:hint="Write Comment..."
+        android:textColor="@color/white"
+        android:paddingStart="16dp"
+        android:textColorHint="@color/text_gray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/CommentProfile"
         app:layout_constraintTop_toBottomOf="@id/bottomLine" />
@@ -217,6 +238,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="35dp"
+        android:src="@drawable/ic_attach"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bottomLine" />
 

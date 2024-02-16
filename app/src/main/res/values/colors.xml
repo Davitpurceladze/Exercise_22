@@ -6,5 +6,9 @@
     <color name="home_background_end">#1F2E35</color>
     <color name="text_gray">#96A7AF</color>
     <color name="post_background">#30444E</color>
+    <color name="comment_input">#2A3C44</color>
+    <color name="comment_img">#3ED598</color>
+
+
 
 </resources>
