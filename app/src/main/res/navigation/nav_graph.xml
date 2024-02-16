@@ -31,7 +31,11 @@
         tools:layout="@layout/fragment_notifications" />
     <fragment
         android:id="@+id/postDetailsFragment"
-        android:name="com.example.exercise_22.presentation.screen.PostDetails.PostDetailsFragment"
+        android:name="com.example.exercise_22.presentation.screen.postDetails.PostDetailsFragment"
         android:label="fragment_post_details"
-        tools:layout="@layout/fragment_post_details" />
+        tools:layout="@layout/fragment_post_details" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>

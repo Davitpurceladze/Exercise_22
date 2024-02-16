@@ -2,9 +2,12 @@ package com.example.exercise_22.di
 
 import com.example.exercise_22.data.common.HandleResponse
 import com.example.exercise_22.data.repository.post.PostsRepositoryImpl
+import com.example.exercise_22.data.repository.post_details.PostDetailsRepositoryImpl
 import com.example.exercise_22.data.repository.story.StoriesRepositoryImpl
+import com.example.exercise_22.data.service.post_details.PostDetailsService
 import com.example.exercise_22.data.service.posts.PostsService
 import com.example.exercise_22.data.service.stories.StoriesService
+import com.example.exercise_22.domain.repository.post_details.PostDetailsRepository
 import com.example.exercise_22.domain.repository.posts.PostsRepository
 import com.example.exercise_22.domain.repository.stories.StoriesRepository
 import dagger.Module
@@ -37,6 +40,18 @@ object RepositoryModule {
     ): PostsRepository {
         return PostsRepositoryImpl(
             postsService = postsService,
+            handleResponse = handleResponse
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providePostDetailsRepository(
+        postDetailsService: PostDetailsService,
+        handleResponse: HandleResponse
+    ): PostDetailsRepository {
+        return PostDetailsRepositoryImpl(
+            postDetailsService = postDetailsService,
             handleResponse = handleResponse
         )
     }

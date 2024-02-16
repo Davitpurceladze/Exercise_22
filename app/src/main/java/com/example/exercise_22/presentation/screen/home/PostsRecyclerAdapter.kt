@@ -13,12 +13,21 @@ import com.example.exercise_22.presentation.model.story.Story
 
 class PostsRecyclerAdapter: ListAdapter<Post, PostsRecyclerAdapter.PostViewHolder>(PostsDiffUtil()) {
 
+    private var onItemClickListener: ((id: Int) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (id: Int) -> Unit)  {
+        onItemClickListener = listener
+    }
+
     inner class PostViewHolder(private val binding: ItemPostLayoutBinding): RecyclerView.ViewHolder(binding.root){
        private lateinit var item: Post
 
         fun bind() {
             item = currentList[adapterPosition]
             with(binding){
+                root.setOnClickListener {
+                    onItemClickListener?.invoke(item.id)
+                }
                 val fullName = "${item.owner.firstName} ${item.owner.lastName}"
                 tvFullName .text = fullName
                 tvDescription.text = item.shareContent

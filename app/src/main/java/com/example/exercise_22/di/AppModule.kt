@@ -2,6 +2,7 @@ package com.example.exercise_22.di
 
 import com.example.exercise_22.BuildConfig
 import com.example.exercise_22.data.common.HandleResponse
+import com.example.exercise_22.data.service.post_details.PostDetailsService
 import com.example.exercise_22.data.service.posts.PostsService
 import com.example.exercise_22.data.service.stories.StoriesService
 import com.squareup.moshi.Moshi
@@ -70,6 +71,12 @@ object AppModule {
     @Singleton
     fun providePostsService(retrofit: Retrofit): PostsService{
         return retrofit.create(PostsService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePostDetailsService(retrofit: Retrofit): PostDetailsService{
+        return retrofit.create(PostDetailsService::class.java)
     }
 
     @Provides

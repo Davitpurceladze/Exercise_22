@@ -15,6 +15,11 @@ const val ITEM_POST = 2
 
 class HomeRecyclerAdapter : ListAdapter<Home, RecyclerView.ViewHolder>(HomeDiffUtil()) {
 
+    private var onItemClickListener: ((id: Int) -> Unit)? = null
+
+    fun setOnItemClickListener(listener: (id: Int) -> Unit)  {
+        onItemClickListener = listener
+    }
 
     inner class StoryViewHolder(private val binding: ItemHomeStoryLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -37,6 +42,9 @@ class HomeRecyclerAdapter : ListAdapter<Home, RecyclerView.ViewHolder>(HomeDiffU
                 layoutManager = LinearLayoutManager(itemView.context)
                 adapter = PostsRecyclerAdapter().apply {
                     submitList(posts)
+                    setOnItemClickListener {
+                        onItemClickListener?.invoke(it)
+                    }
                 }
             }
         }

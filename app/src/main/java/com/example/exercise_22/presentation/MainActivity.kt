@@ -1,13 +1,19 @@
 package com.example.exercise_22.presentation
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.exercise_22.R
 import com.example.exercise_22.databinding.ActivityMainBinding
+import com.example.exercise_22.presentation.screen.home.HomeFragmentDirections
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,11 +24,13 @@ class MainActivity : AppCompatActivity() {
     lateinit var navHostFragment: NavHostFragment
     lateinit var navController: NavController
 
+    private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        requestPermission()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        readPushToken()
 
         bottomNavigationView = binding.bottomNavigationView
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -31,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupWithNavController(
             bottomNavigationView, navController
         )
+        navigateToPostDetailsFragment()
+
 
         bottomNavigationView.setOnItemReselectedListener { item ->
             when(item.itemId) {
@@ -40,6 +50,34 @@ class MainActivity : AppCompatActivity() {
                 R.id.notificationsFragment -> {true}
                 else -> {false}
             }
+        }
+    }
+
+    private fun navigateToPostDetailsFragment() {
+        val postId = intent.getStringExtra("postId")
+        postId?.let {
+            val navigationToPostDetailsFragment = HomeFragmentDirections.actionHomeFragmentToPostDetailsFragment(it.toInt())
+            navController.navigate(navigationToPostDetailsFragment)
+        }
+    }
+
+    private fun readPushToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                println("this is taskException (Fetching FCM registration token failed) -> ${task.exception}")
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            val token = task.result
+            // Log and toast
+            println("this is token -> $token")
+
+        })
+    }
+
+    private fun requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
         }
     }
 }
