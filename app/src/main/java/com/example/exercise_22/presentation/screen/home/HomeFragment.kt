@@ -56,7 +56,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     }
 
     private fun handleHomeState(state: HomeState) {
+
         if(state.posts != null && state.stories != null) {
+            println(state)
             val list = listOf(Home(1, state.stories, state.posts ), Home(2, state.stories, state.posts))
             homeRecyclerAdapter.submitList(list)
         }

@@ -64,13 +64,11 @@ class MainActivity : AppCompatActivity() {
     private fun readPushToken() {
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-                println("this is taskException (Fetching FCM registration token failed) -> ${task.exception}")
                 return@OnCompleteListener
             }
             // Get new FCM registration token
             val token = task.result
             // Log and toast
-            println("this is token -> $token")
 
         })
     }

@@ -18,7 +18,6 @@ class FirebaseMessagingService :  FirebaseMessagingService() {
 
         super.onMessageReceived(message)
         message.data
-        println(message.data)
         showNotification(message.data["id"] ?: "", message.data["title"] ?: "", message.data["desc"] ?: "")
     }
 
